@@ -1,0 +1,12 @@
+@startuml dhifa_collection_laravel
+
+class users {
+    * email VARCHAR(50)
+    --
+    * password VARCHAR(50)
+    * fullname VARCHAR(100)
+    * address VARCHAR(250)
+    * phone_number VARCHAR(15)
+}
+
+@enduml
