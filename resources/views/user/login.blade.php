@@ -13,8 +13,7 @@
 
 <body>
 
-
-    <!-- Modal -->
+    @isset($registration_success)
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -32,6 +31,12 @@
             </div>
         </div>
     </div>
+
+    <script>
+        let myModal = new bootstrap.Modal(document.getElementById('exampleModal'), {});
+        myModal.show();
+    </script>
+    @endisset
 
     <div class="container d-flex vh-100">
         <div class="my-auto align-items-center mx-auto justify-content-center" style="min-width: 300px;">

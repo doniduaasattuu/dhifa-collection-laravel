@@ -22,10 +22,17 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
         return view('welcome');
     });
 
+    // LOGOUT
     Route::get("/logout", [App\Http\Controllers\UserController::class, "logout"]);
 });
 
 Route::middleware(OnlyGuestMiddleware::class)->group(function () {
+
+    // LOGIN
     Route::get("/login", [App\Http\Controllers\UserController::class, "login"]);
     Route::post("/login", [App\Http\Controllers\UserController::class, "doLogin"]);
+
+    // REGISTRATION
+    Route::get("/register", [App\Http\Controllers\UserController::class, "registration"]);
+    Route::post("/register", [App\Http\Controllers\UserController::class, "register"]);
 });

@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
+    // LOGIN
     public function login()
     {
         return response()->view("user.login", [
@@ -41,6 +42,60 @@ class UserController extends Controller
         }
     }
 
+    // REGISTRATION
+    public function registration()
+    {
+        return response()->view("user.register", [
+            "title" => "Registration"
+        ]);
+    }
+
+    public function register(Request $request)
+    {
+        $email = $request->input("email");
+        $password = $request->input("password");
+        $fullname = $request->input("fullname");
+        $address = $request->input("address");
+        $phone_number = $request->input("phone_number");
+
+        if (
+            empty($email) ||
+            empty($password) ||
+            empty($fullname) ||
+            empty($address) ||
+            empty($phone_number)
+        ) {
+            return response()->view("user.register", [
+                "title" => "Registration",
+                "error_required" => "All data is required! ⚠️"
+            ]);
+        }
+
+        $user = User::query()->find($email);
+
+        if ($user == null) {
+
+            User::create([
+                "email" =>  $email,
+                "password" =>  $password,
+                "fullname" =>  $fullname,
+                "address" =>  $address,
+                "phone_number" => $phone_number,
+            ]);
+
+            return response()->view("user.login", [
+                "title" => "Login",
+                "registration_success" => true
+            ]);
+        } else {
+            return response()->view("user.register", [
+                "title" => "Registration",
+                "error_email_duplicate" => "Email is used! ⚠️"
+            ]);
+        }
+    }
+
+    // LOGOUT
     public function logout(Request $request)
     {
         $request->session()->forget('user');

@@ -12,4 +12,12 @@ class User extends Model
     protected $keyType = "string";
     public $incrementing = false;
     public $timestamps = false;
+
+    protected $fillable = [
+        "email",
+        "password",
+        "fullname",
+        "address",
+        "phone_number",
+    ];
 }
