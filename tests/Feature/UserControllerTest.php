@@ -57,6 +57,22 @@ class UserControllerTest extends TestCase
             ->assertRedirect("/");
     }
 
+    public function testDoLoginRedirect()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan"
+        ])->post("/login", [
+            "email" => "salah",
+            "password" => "salah",
+        ])->assertRedirect("/");
+    }
+
+    public function testGetHomeRedirect()
+    {
+        $this->get("/")
+            ->assertRedirect("/login");
+    }
+
     public function testFindUser()
     {
         $user = User::query()->find("doni.duaasattuu@gmail.com");

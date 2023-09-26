@@ -31,6 +31,7 @@ class UserController extends Controller
         $user = User::query()->find($email);
 
         if ($user != null && $user->password == $password) {
+            session(["user" => $user->fullname]);
             return redirect("/");
         } else {
             return response()->view("user.login", [
@@ -38,5 +39,11 @@ class UserController extends Controller
                 "error" => "Email or password is wrong! ⚠️ "
             ]);
         }
+    }
+
+    public function logout(Request $request)
+    {
+        $request->session()->forget('user');
+        return redirect("/");
     }
 }
