@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Product;
 use App\Models\User;
 use Illuminate\Http\Request;
 
@@ -92,6 +93,71 @@ class UserController extends Controller
                 "title" => "Registration",
                 "error_email_duplicate" => "Email is used! ⚠️"
             ]);
+        }
+    }
+
+    // CHANGE PASSWORD
+    public function changePassword(Request $request)
+    {
+        return response()->view("user.change-password", [
+            "title" => "Change Password"
+        ]);
+    }
+
+    public function doChangePassword(Request $request)
+    {
+        $email = $request->input("email");
+        $current_password = $request->input("current_password");
+        $new_password = $request->input("new_password");
+        $confirm_new_password = $request->input("confirm_new_password");
+
+        if (empty($email) || empty($current_password) || empty($new_password) || empty($confirm_new_password)) {
+            return response()->view("user.change-password", [
+                "title" => "Change Password",
+                "error" => "All data is required! ⚠️"
+            ]);
+        }
+
+        $user = User::query()->find($email);
+
+        if ($user == null) {
+            return response()->view("user.change-password", [
+                "title" => "Change Password",
+                "error" => "Email is not found! ⚠️"
+            ]);
+        } else {
+
+            $correctPassword = $user->password;
+
+            if ($correctPassword == $current_password) {
+
+                if ($new_password == $confirm_new_password) {
+
+                    $user->password = $new_password;
+                    $user->update();
+
+                    $products = Product::query()->get();
+
+                    return response()->view("home", [
+                        "title" => "Dhifa Collection",
+                        "user" => $request->session()->get("user"),
+                        "products" => $products,
+                        "change_password_success" => true
+                    ]);
+                } else {
+
+                    return response()->view("user.change-password", [
+                        "title" => "Change Password",
+                        "error" => "Password is not match! ⚠️"
+                    ]);
+                }
+            } else {
+
+                return response()->view("user.change-password", [
+                    "title" => "Change Password",
+                    "error" => "Email or password is wrong! ⚠️"
+                ]);
+            }
         }
     }
 

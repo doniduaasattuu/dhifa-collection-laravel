@@ -21,6 +21,10 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     // HOME
     Route::get('/', [\App\Http\Controllers\HomeController::class, "home"]);
 
+    // CHANGE PASSWORD
+    Route::get('/change-password', [\App\Http\Controllers\UserController::class, "changePassword"]);
+    Route::post('/change-password', [\App\Http\Controllers\UserController::class, "doChangePassword"]);
+
     // LOGOUT
     Route::get("/logout", [App\Http\Controllers\UserController::class, "logout"]);
 });

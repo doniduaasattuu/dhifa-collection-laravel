@@ -56,7 +56,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="password" class="form-label -mb-5">Password</label>
-                    <input id="password" name="password" type="password" class="form-control" id="password">
+                    <input id="password" name="password" type="password" class="form-control">
                 </div>
 
                 <button type="submit" class="btn btn-primary">Sign In</button>
