@@ -7,3 +7,5 @@ desc users;
 show create table users;
 
 select * from users;
+
+select * from products;

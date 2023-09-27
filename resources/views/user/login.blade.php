@@ -59,7 +59,7 @@
                     <input id="password" name="password" type="password" class="form-control" id="password">
                 </div>
 
-                <button type="submit" class="btn btn-primary">Submit</button>
+                <button type="submit" class="btn btn-primary">Sign In</button>
                 <div id="emailHelp" class="form-text">Don't have an account ?, Register <a class="text-decoration-none" href="/register">here</a></div>
             </form>
         </div>

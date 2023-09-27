@@ -18,9 +18,8 @@ use Illuminate\Support\Facades\Route;
 
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
-    Route::get('/', function () {
-        return view('welcome');
-    });
+    // HOME
+    Route::get('/', [\App\Http\Controllers\HomeController::class, "home"]);
 
     // LOGOUT
     Route::get("/logout", [App\Http\Controllers\UserController::class, "logout"]);

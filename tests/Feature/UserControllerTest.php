@@ -16,7 +16,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText("Login")
             ->assertSeeText("Email address")
             ->assertSeeText("Password")
-            ->assertSeeText("Submit")
+            ->assertSeeText("Sign In")
             ->assertSeeText("Register here");
     }
 
@@ -29,7 +29,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText("Login")
             ->assertSeeText("Email address")
             ->assertSeeText("Password")
-            ->assertSeeText("Submit")
+            ->assertSeeText("Sign In")
             ->assertSeeText("Register here")
             ->assertSeeText("Email and password is required!");
     }
@@ -43,7 +43,7 @@ class UserControllerTest extends TestCase
             ->assertSeeText("Login")
             ->assertSeeText("Email address")
             ->assertSeeText("Password")
-            ->assertSeeText("Submit")
+            ->assertSeeText("Sign In")
             ->assertSeeText("Register here")
             ->assertSeeText("Email or password is wrong!");
     }
