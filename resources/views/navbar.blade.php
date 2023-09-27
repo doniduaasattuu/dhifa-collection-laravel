@@ -27,7 +27,7 @@
                         Account
                     </a>
                     <ul class="dropdown-menu">
-                        <li><a class="text-dark dropdown-item" href="#">Change Name</a></li>
+                        <li><a class="text-dark dropdown-item" href="/change-name">Change Name</a></li>
                         <li><a class="text-dark dropdown-item" href="/change-password">Change Password</a></li>
                         <li><a class="text-light bg-danger dropdown-item" href="/logout">Logout</a></li>
                     </ul>

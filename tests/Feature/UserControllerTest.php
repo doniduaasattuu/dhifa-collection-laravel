@@ -210,4 +210,52 @@ class UserControllerTest extends TestCase
         $user->password = "1234";
         $user->update();
     }
+
+    // CHANGE NAME
+    public function testGetChangeName()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan"
+        ])->get("/change-name")
+            ->assertSeeText("Change Name")
+            ->assertSeeText("Your Email")
+            ->assertSeeText("New Fullname")
+            ->assertSeeText("Change Username");
+    }
+
+    public function testDoChangeNameRequestEmpty()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [])
+            ->assertSeeText("All data is required!");
+    }
+
+    public function testDoChangeNameWrongEmail()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [
+            "email" => "tidak_ada@gmail.com",
+            "name" => "Doni Darmawan Wibisono"
+        ])
+            ->assertSeeText("Email is not found!");
+    }
+
+    public function testDoChangeNameSuccess()
+    {
+        $this->withSession([
+            "user" => "Doni Darmawan"
+        ])->post("/change-name", [
+            "email" => "doni.duaasattuu@gmail.com",
+            "name" => "Doni Darmawan Wibisono"
+        ])
+            ->assertSeeText("Success!")
+            ->assertSeeText("Your name has been changed successfully.")
+            ->assertSeeText("Close");
+
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
+        $user->fullname = "Doni Darmawan";
+        $user->save();
+    }
 }

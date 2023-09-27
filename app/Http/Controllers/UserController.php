@@ -142,7 +142,8 @@ class UserController extends Controller
                         "title" => "Dhifa Collection",
                         "user" => $request->session()->get("user"),
                         "products" => $products,
-                        "change_password_success" => true
+                        "changed" => true,
+                        "content_changed" => "password"
                     ]);
                 } else {
 
@@ -158,6 +159,52 @@ class UserController extends Controller
                     "error" => "Email or password is wrong! ⚠️"
                 ]);
             }
+        }
+    }
+
+    // CHANGE NAME
+    public function changeName()
+    {
+        return response()->view("user.change-name", [
+            "title" => "Change Name"
+        ]);
+    }
+
+    public function doChangeName(Request $request)
+    {
+        $email = $request->input("email");
+        $name = $request->input("name");
+
+        if (empty($email) || empty($name)) {
+            return response()->view("user.change-name", [
+                "title" => "Change Name",
+                "error" => "All data is required! ⚠️"
+            ]);
+        }
+
+        $user = User::query()->find($email);
+
+        if ($user == null) {
+            return response()->view("user.change-name", [
+                "title" => "Change Name",
+                "error" => "Email is not found! ⚠️"
+            ]);
+        } else {
+
+            $user->fullname = $name;
+            $user->update();
+
+            session(["user" => $user->fullname]);
+
+            $products = Product::query()->get();
+
+            return response()->view("home", [
+                "title" => "Dhifa Collection",
+                "user" => $request->session()->get("user"),
+                "products" => $products,
+                "changed" => true,
+                "content_changed" => "name"
+            ]);
         }
     }
 
