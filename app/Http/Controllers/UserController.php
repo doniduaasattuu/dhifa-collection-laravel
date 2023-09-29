@@ -34,6 +34,8 @@ class UserController extends Controller
 
         if ($user != null && $user->password == $password) {
             session(["user" => $user->fullname]);
+            session(["email" => $user->email]);
+
             return redirect("/");
         } else {
             return response()->view("user.login", [
@@ -142,8 +144,7 @@ class UserController extends Controller
                         "title" => "Dhifa Collection",
                         "user" => $request->session()->get("user"),
                         "products" => $products,
-                        "changed" => true,
-                        "content_changed" => "password"
+                        "account_changed" => "password"
                     ]);
                 } else {
 
@@ -202,8 +203,7 @@ class UserController extends Controller
                 "title" => "Dhifa Collection",
                 "user" => $request->session()->get("user"),
                 "products" => $products,
-                "changed" => true,
-                "content_changed" => "name"
+                "account_changed" => "name"
             ]);
         }
     }

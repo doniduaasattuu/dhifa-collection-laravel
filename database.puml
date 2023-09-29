@@ -9,4 +9,36 @@ class users {
     * phone_number VARCHAR(15)
 }
 
+class products {
+    * id INT(10) UNSIGNED AUTO_INCREMENT
+    --
+    * name VARCHAR(100)
+    * price INT(10) UNSIGNED 0
+    * category ENUM('Female', 'Male')
+    * stock INT(10) UNSIGNED 0
+}
+
+class orders {
+    * id CHAR(36) UUID
+    --
+    * email VARCHAR(50) <<FK>>
+    * order_date TIMESTAMP CURRENT
+    * shopping_detail INT(10) UNSIGNED
+    * status ENUM('Open', 'Checkout', 'Verified', 'Closed')
+}
+
+class order_details {
+    * id INT(10) UNSIGNED AUTO_INCREMENT
+    --
+    * order_id CHAR(36) <<FK>>
+    * product_id INT(10) UNSIGNED <<FK>>
+    * price INT(10) UNSIGNED 0
+    * qty INT(10) UNSIGNED 0
+    * amount INT(10) UNSIGNED 0
+}
+
+users ||--|{ orders
+orders ||--|{ order_details
+order_details ||--|{ products
+
 @enduml

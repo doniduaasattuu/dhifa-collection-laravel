@@ -12,11 +12,11 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('products', function (Blueprint $table) {
-            $table->integer("id")->nullable(false)->autoIncrement();
-            $table->string("name")->nullable(false);
-            $table->integer("price")->nullable(false)->unsigned();
+            $table->unsignedInteger("id")->autoIncrement();
+            $table->string("name", 100)->nullable(false);
+            $table->unsignedInteger("price")->nullable(false)->default(0);
             $table->enum("category", ["Female", "Male"])->nullable(false);
-            $table->integer("qty")->nullable(false)->unsigned();
+            $table->unsignedInteger("stock")->nullable(false)->default(0);
         });
     }
 

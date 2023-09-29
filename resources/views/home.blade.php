@@ -167,7 +167,7 @@
 
     @include("navbar")
 
-    @isset($changed)
+    @isset($account_changed)
     <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -176,7 +176,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Your {{ $content_changed }} has been changed successfully.
+                    Your {{ $account_changed }} has been changed successfully.
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -190,6 +190,30 @@
         myModal.show();
     </script>
     @endisset
+
+    @if (Session::has('successfully_added') != null)
+    <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="bg-light modal-header">
+                    <h1 class=" modal-title fs-5" id="exampleModalLabel">Success! ✅</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Product added successfully to cart.
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
+        myModal1.show();
+    </script>
+    @endif()
 
     <div id="myCarousel" class="carousel slide mb-0" data-bs-ride="carousel" data-bs-theme="light">
         <div class="carousel-indicators">
@@ -248,17 +272,17 @@
                             <h4>{{ $product->name }}</h4>
                             <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore deleniti quae sequi iure, voluptatibus voluptas?.</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <div class="btn-group">
-                                    <button product_id="{{ $product->id }}" product_name="{{ $product->name }}" price="{{ $product->price }}" type="button" class="myButton btn btn-sm btn-outline-secondary">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check-fill me-1 " viewBox="0 0 16 16">
-                                            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
-                                        </svg>
-                                        Add to cart</button>
-                                </div>
+                                <form action="/add-to-cart/{{ $product->id }}" method="POST">
+                                    @csrf
+                                    <div class="btn-group">
+                                        <button type="submit" class="myButton btn btn-sm btn-outline-secondary">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check-fill me-1 " viewBox="0 0 16 16">
+                                                <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                            </svg>
+                                            Add to cart</button>
+                                    </div>
+                                </form>
                                 <small class="text-body-secondary">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-currency-dollar mt-2" viewBox="0 0 16 16">
-                                        <path d="M4 10.781c.148 1.667 1.513 2.85 3.591 3.003V15h1.043v-1.216c2.27-.179 3.678-1.438 3.678-3.3 0-1.59-.947-2.51-2.956-3.028l-.722-.187V3.467c1.122.11 1.879.714 2.07 1.616h1.47c-.166-1.6-1.54-2.748-3.54-2.875V1H7.591v1.233c-1.939.23-3.27 1.472-3.27 3.156 0 1.454.966 2.483 2.661 2.917l.61.162v4.031c-1.149-.17-1.94-.8-2.131-1.718H4zm3.391-3.836c-1.043-.263-1.6-.825-1.6-1.616 0-.944.704-1.641 1.8-1.828v3.495l-.2-.05zm1.591 1.872c1.287.323 1.852.859 1.852 1.769 0 1.097-.826 1.828-2.2 1.939V8.73l.348.086z" />
-                                    </svg>
                                     IDR {{ $product->price }}
                                 </small>
                             </div>
@@ -267,9 +291,6 @@
                 </div>
                 <!-- CARD END -->
                 @endforeach
-
-
-
 
             </div>
         </div>
@@ -294,7 +315,7 @@
     </div>
 
 
-    <script>
+    <!-- <script>
         const button = document.getElementsByClassName("myButton");
 
         for (let i = 0; i < button.length; i++) {
@@ -315,7 +336,7 @@
                 alert(button[i].getAttribute("product_name") + " added to cart");
             }
         }
-    </script>
+    </script> -->
 </body>
 
 </html>

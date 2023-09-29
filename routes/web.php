@@ -31,6 +31,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
 
     // LOGOUT
     Route::get("/logout", [App\Http\Controllers\UserController::class, "logout"]);
+
+    // PRODUCT
+    Route::post("add-to-cart/{id}", [App\Http\Controllers\ProductController::class, "addToCart"]);
 });
 
 Route::middleware(OnlyGuestMiddleware::class)->group(function () {

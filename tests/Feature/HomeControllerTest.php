@@ -11,7 +11,7 @@ class HomeControllerTest extends TestCase
     public function testGetHome()
     {
         $this->withSession([
-            "user" => "Doni Darmawan"
+            "user" => "Doni Darmawan",
         ])->get("/")
             ->assertSeeText("Search")
             ->assertSeeText("Home")
