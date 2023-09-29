@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- <meta name="csrf-token" content="{{ csrf_token() }}"> -->
     <!-- BOOTSTRAP -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-9ndCyUaIbzAi2FUVXJi0CjmCapSmO7SnpJef0486qhLnuZ2cdeRhO02iuK6FUUVM" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-geWF76RCwLtnZ8qwWowPQNguL3RmwHVBC9FhGdlKrxdiJJigb/j/68SIy3Te4Bkz" crossorigin="anonymous"></script>
@@ -191,7 +192,6 @@
     </script>
     @endisset
 
-    @if (Session::has('successfully_added') != null)
     <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -200,7 +200,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Product added successfully to cart.
+                    Product added successfully to cart ☺️
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -208,12 +208,6 @@
             </div>
         </div>
     </div>
-
-    <script>
-        let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
-        myModal1.show();
-    </script>
-    @endif()
 
     <div id="myCarousel" class="carousel slide mb-0" data-bs-ride="carousel" data-bs-theme="light">
         <div class="carousel-indicators">
@@ -272,16 +266,13 @@
                             <h4>{{ $product->name }}</h4>
                             <p class="card-text">Lorem ipsum dolor sit amet consectetur adipisicing elit. Dolore deleniti quae sequi iure, voluptatibus voluptas?.</p>
                             <div class="d-flex justify-content-between align-items-center">
-                                <form action="/add-to-cart/{{ $product->id }}" method="POST">
-                                    @csrf
-                                    <div class="btn-group">
-                                        <button type="submit" class="myButton btn btn-sm btn-outline-secondary">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check-fill me-1 " viewBox="0 0 16 16">
-                                                <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
-                                            </svg>
-                                            Add to cart</button>
-                                    </div>
-                                </form>
+                                <div class="btn-group">
+                                    <button product_id="{{ $product->id }}" type="submit" class="myButton btn btn-sm btn-outline-secondary">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-bag-check-fill me-1 " viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" d="M10.5 3.5a2.5 2.5 0 0 0-5 0V4h5v-.5zm1 0V4H15v10a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V4h3.5v-.5a3.5 3.5 0 1 1 7 0zm-.646 5.354a.5.5 0 0 0-.708-.708L7.5 10.793 6.354 9.646a.5.5 0 1 0-.708.708l1.5 1.5a.5.5 0 0 0 .708 0l3-3z" />
+                                        </svg>
+                                        Add to cart</button>
+                                </div>
                                 <small class="text-body-secondary">
                                     IDR {{ $product->price }}
                                 </small>
@@ -315,28 +306,30 @@
     </div>
 
 
-    <!-- <script>
+    <script>
         const button = document.getElementsByClassName("myButton");
 
         for (let i = 0; i < button.length; i++) {
 
             button[i].onclick = () => {
 
-                let product_id = button[i].getAttribute("product_id");
-                let price = button[i].getAttribute("price");
-
                 const ajax = new XMLHttpRequest();
-
-                ajax.open("POST", "add_to_cart");
-
+                ajax.open("POST", "add-to-cart/" + button[i].getAttribute("product_id"));
                 ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                ajax.setRequestHeader("X-CSRF-TOKEN", "<?php echo csrf_token() ?>");
 
-                ajax.send(`product_id=${product_id}&price=${price}`);
+                ajax.onreadystatechange = () => {
+                    if (ajax.readyState === 4) {
+                        let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
+                        myModal1.show();
+                    }
+                }
 
-                alert(button[i].getAttribute("product_name") + " added to cart");
+                ajax.send();
+
             }
         }
-    </script> -->
+    </script>
 </body>
 
 </html>

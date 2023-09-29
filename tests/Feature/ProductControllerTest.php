@@ -3,9 +3,11 @@
 namespace Tests\Feature;
 
 use App\Http\Controllers\ProductController;
+use App\Models\Order;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
@@ -48,5 +50,13 @@ class ProductControllerTest extends TestCase
 
         // $productController = new ProductController();
         // self::assertTrue($productController->checkStatusOpen("doni.duuasattuu@gmail.com"));
+    }
+
+    public function testDeleteOrderDetailAndOrders()
+    {
+        DB::table('order_details')->delete();
+        DB::table('orders')->delete();
+
+        self::assertCount(0, Order::query()->get());
     }
 }

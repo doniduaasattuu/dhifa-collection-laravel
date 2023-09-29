@@ -37,7 +37,8 @@ class ProductController extends Controller
                 "amount" => $product->price,
             ]);
 
-            return Redirect::back()->with('successfully_added', $product->name);
+            session(["successfully_added" => "true"]);
+            return Redirect::back();
         } else {
 
             $status_order_open = $orders->toQuery()->where("status", "=", "Open")->get();
@@ -54,7 +55,8 @@ class ProductController extends Controller
                     "amount" => $product->price,
                 ]);
 
-                return Redirect::back()->with('successfully_added', $product->name);
+                session(["successfully_added" => "true"]);
+                return Redirect::back();
             }
         }
     }

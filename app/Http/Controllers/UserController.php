@@ -211,7 +211,7 @@ class UserController extends Controller
     // LOGOUT
     public function logout(Request $request)
     {
-        $request->session()->forget('user');
+        $request->session()->flush();
         return redirect("/");
     }
 }
