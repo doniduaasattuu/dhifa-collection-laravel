@@ -45,18 +45,21 @@ class ProductController extends Controller
 
             if (count($status_order_open)) {
 
-                $product = Product::query()->find($id);
+                $product_already_on_cart = OrderDetail::query()->where("order_id", "=", $status_order_open[0]->id)->where("product_id", "=", $status_order_open[0]->id)->first();
 
-                OrderDetail::create([
-                    "order_id" => $status_order_open[0]->id,
-                    "product_id" => $id,
-                    "qty" => 1,
-                    "price" => $product->price,
-                    "amount" => $product->price,
-                ]);
+                if ($product_already_on_cart != null) {
+                    // menambah quantity
+                } else {
+                    $product = Product::query()->find($id);
 
-                session(["successfully_added" => "true"]);
-                return Redirect::back();
+                    OrderDetail::create([
+                        "order_id" => $status_order_open[0]->id,
+                        "product_id" => $id,
+                        "qty" => 1,
+                        "price" => $product->price,
+                        "amount" => $product->price,
+                    ]);
+                }
             }
         }
     }

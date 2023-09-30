@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Http\Controllers\ProductController;
 use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
@@ -58,5 +59,27 @@ class ProductControllerTest extends TestCase
         DB::table('orders')->delete();
 
         self::assertCount(0, Order::query()->get());
+    }
+
+    public function testProductAlreadyOnCart()
+    {
+        $product_already_on_cart = OrderDetail::query()->where("product_id", "=", "1")->first();
+        self::assertNotNull($product_already_on_cart);
+        Log::info(json_encode($product_already_on_cart));
+    }
+
+    public function testProductNotAlreadyOnCart()
+    {
+        $product_not_already_on_cart = OrderDetail::query()->where("product_id", "=", "90")->first();
+        self::assertNull($product_not_already_on_cart);
+        Log::info(json_encode($product_not_already_on_cart));
+    }
+
+    public function testFindOnCart()
+    {
+        $product_already_on_cart = OrderDetail::query()->where("order_id", "=", "9a410913-4a2f-4608-9e33-efda023de89e")->where("product_id", "=", "1")->get();
+        self::assertNotNull($product_already_on_cart);
+        self::assertCount(1, $product_already_on_cart);
+        Log::info(json_encode($product_already_on_cart));
     }
 }

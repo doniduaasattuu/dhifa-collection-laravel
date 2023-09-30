@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasManyThrough;
 
 class User extends Model
 {
@@ -17,6 +18,18 @@ class User extends Model
     public function orders(): HasMany
     {
         return $this->hasMany(Order::class, "email", "email");
+    }
+
+    public function order_details(): HasManyThrough
+    {
+        return $this->hasManyThrough(
+            OrderDetail::class,
+            Order::class,
+            "email",
+            "order_id",
+            "email",
+            "id"
+        );
     }
 
     protected $fillable = [

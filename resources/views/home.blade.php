@@ -200,7 +200,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    Product added successfully to cart ☺️
+                    Product successfully added to cart ☺️
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
@@ -308,6 +308,7 @@
 
     <script>
         const button = document.getElementsByClassName("myButton");
+        let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
 
         for (let i = 0; i < button.length; i++) {
 
@@ -320,13 +321,11 @@
 
                 ajax.onreadystatechange = () => {
                     if (ajax.readyState === 4) {
-                        let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
                         myModal1.show();
                     }
                 }
 
                 ajax.send();
-
             }
         }
     </script>

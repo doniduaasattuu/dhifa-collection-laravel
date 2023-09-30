@@ -2,10 +2,13 @@
 
 namespace Tests\Feature;
 
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Tests\TestCase;
 
 class UserControllerTest extends TestCase
@@ -257,5 +260,38 @@ class UserControllerTest extends TestCase
         $user = User::query()->find("doni.duaasattuu@gmail.com");
         $user->fullname = "Doni Darmawan";
         $user->save();
+    }
+
+    public function testUserRelation()
+    {
+        $user = User::query()->with("orders")->find("doni.duaasattuu@gmail.com");
+        self::assertNotNull($user);
+        Log::info(json_encode($user, JSON_PRETTY_PRINT));
+
+        $orders = $user->orders;
+        self::assertNotNull($orders);
+        Log::info(json_encode($orders, JSON_PRETTY_PRINT));
+    }
+
+    public function testOrderRelation()
+    {
+        $order = Order::query()->with("order_details")->find("9a410913-4a2f-4608-9e33-efda023de89e");
+        self::assertNotNull($order);
+        Log::info(json_encode($order, JSON_PRETTY_PRINT));
+    }
+
+    public function testOrderDetailRelation()
+    {
+        $order_detail = OrderDetail::query()->with("products")->where("order_id",  "=", "9a410913-4a2f-4608-9e33-efda023de89e")->get();
+        self::assertNotNull($order_detail);
+        Log::info(json_encode($order_detail, JSON_PRETTY_PRINT));
+    }
+
+    public function testHasManyThrough()
+    {
+        $user = User::query()->with(["orders", "order_details"])->find("doni.duaasattuu@gmail.com");;
+
+        self::assertNotNull($user);
+        Log::info(json_encode($user, JSON_PRETTY_PRINT));
     }
 }
