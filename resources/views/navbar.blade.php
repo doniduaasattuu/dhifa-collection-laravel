@@ -14,7 +14,7 @@
                     <a class="text-dark nav-link" aria-current="page" href="/">Home</a>
                 </li>
                 <li class="nav-item me-xl-5 me-lg-3">
-                    <a class="text-dark nav-link" href="cart">Cart</a>
+                    <a class="text-dark nav-link" href="/cart">Cart</a>
                 </li>
                 <li class="nav-item me-xl-5 me-lg-3">
                     <a class="text-dark nav-link" href="#">New arrival</a>

@@ -22,7 +22,6 @@ class ProductController extends Controller
 
         $orders = $user->orders;
 
-        // jika belum ada order sama sekali akan dibuatkan order baru
         if (null == $orders->toArray()) {
 
             $order = Order::create([
@@ -31,13 +30,16 @@ class ProductController extends Controller
 
             $product = Product::query()->find($id);
 
-            OrderDetail::create([
-                "order_id" => $order->id,
-                "product_id" => $id,
-                "qty" => 1,
-                "price" => $product->price,
-                "amount" => $product->price,
-            ]);
+            $order_detail = new OrderDetail();
+            $order_detail->order_id = $order->id;
+            $order_detail->product_id = $id;
+            $order_detail->qty = 1;
+            $order_detail->price = $product->price;
+            $order_detail->amount = $product->price;
+            $order_detail->save();
+
+            $order->shopping_total = $order_detail->amount;
+            $order->save();
         } else {
 
             // order sudah ada, lalu dilakukan pengecekan order
@@ -51,41 +53,34 @@ class ProductController extends Controller
                 foreach ($order_details as $order_detail) {
                     if ($order_detail->product_id === $product->id) {
                         $order_detail->qty = $order_detail->qty + 1;
+                        $order_detail->amount = $order_detail->qty * $order_detail->price;
                         $order_detail->save();
+
+                        $order = Order::query()->find($order_open->id);
+                        $order->shopping_total = $order_details->sum("amount");
+                        $order->save();
+
                         return;
                     }
                 }
 
-                OrderDetail::create([
-                    "order_id" => $order_open->id,
-                    "product_id" => $id,
-                    "qty" => 1,
-                    "price" => $product->price,
-                    "amount" => $product->price,
-                ]);
+                $order_detail = new OrderDetail();
+                $order_detail->order_id = $order_open->id;
+                $order_detail->product_id = $id;
+                $order_detail->qty = 1;
+                $order_detail->price = $product->price;
+                $order_detail->amount = $product->price;
+                $order_detail->save();
+
+                $order_details = OrderDetail::where("order_id", "=", $order_open->id)->get();
+                $order = Order::query()->find($order_open->id);
+                $order->shopping_total = $order_details->sum("amount");
+                $order->save();
             }
-
-
-            // $status_order_open = $orders->toQuery()->where("status", "=", "Open")->get();
-
-            // if (count($status_order_open)) {
-
-            //     $product_already_on_cart = OrderDetail::query()->where("order_id", "=", $status_order_open[0]->id)->where("product_id", "=", $status_order_open[0]->id)->first();
-
-            //     if ($product_already_on_cart != null) {
-            //         // menambah quantity
-            //     } else {
-            //         $product = Product::query()->find($id);
-
-            //         OrderDetail::create([
-            //             "order_id" => $status_order_open[0]->id,
-            //             "product_id" => $id,
-            //             "qty" => 1,
-            //             "price" => $product->price,
-            //             "amount" => $product->price,
-            //         ]);
-            //     }
-            // }
         }
+    }
+
+    public function cart()
+    {
     }
 }

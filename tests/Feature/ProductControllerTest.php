@@ -37,22 +37,6 @@ class ProductControllerTest extends TestCase
         Log::info(json_encode($status_open, JSON_PRETTY_PRINT));
     }
 
-    public function testCheckStatusOpen()
-    {
-        $user = User::query()->find("doni.duaasattuu@gmail.com");
-
-        $orders = $user->orders;
-
-        self::assertCount(0, $orders);
-
-        // $status_order_open = $orders->toQuery()->where("status", "=", "Open")->get();
-        // self::assertTrue($status_order_open != null);
-        // self::assertFalse($status_order_open == null);
-
-        // $productController = new ProductController();
-        // self::assertTrue($productController->checkStatusOpen("doni.duuasattuu@gmail.com"));
-    }
-
     public function testDeleteOrderDetailAndOrders()
     {
         DB::table('order_details')->delete();
@@ -69,6 +53,7 @@ class ProductControllerTest extends TestCase
         self::assertEquals("doni.duaasattuu@gmail.com", $order_open->email);
         self::assertEquals("Open", $order_open->status);
         Log::info(json_encode($order_open, JSON_PRETTY_PRINT));
+        Log::info($order_open->sum("amount"));
 
         $order_details = OrderDetail::where("order_id", "=", $order_open->id)->get();
         Log::info(json_encode($order_details, JSON_PRETTY_PRINT));
@@ -79,13 +64,4 @@ class ProductControllerTest extends TestCase
             }
         }
     }
-
-    // public function testOrderDetailRelations()
-    // {
-    //     $user = User::query()->find("doni.duaasattuu@gmail.com");
-    //     $orders = $user->orders;
-    //     self::assertNotNull($orders);
-    //     self::assertEquals($orders->status, "Closed");
-    //     Log::info(json_encode($orders, JSON_PRETTY_PRINT));
-    // }
 }
