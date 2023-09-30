@@ -64,4 +64,25 @@ class ProductControllerTest extends TestCase
             }
         }
     }
+
+    public function testOrderDetailsRelations()
+    {
+        $user = User::query()->with("order_details")->find("doni.duaasattuu@gmail.com");
+        $order_details = $user->order_details;
+
+        self::assertNotNull($order_details);
+        Log::info(json_encode($order_details, JSON_PRETTY_PRINT));
+    }
+
+    public function testOrderDetailRelations()
+    {
+        $order_details = OrderDetail::query()->with("product")->where("order_id", "=", "9a42320c-dd13-44e9-ba26-68eff68dfc2e")->get();
+        self::assertNotNull($order_details);
+        // Log::info(json_encode($order_details, JSON_PRETTY_PRINT));
+        foreach ($order_details as $order_detail) {
+            $product = $order_detail->product;
+            self::assertNotNull($product);
+            Log::info(json_encode($product->name, JSON_PRETTY_PRINT));
+        }
+    }
 }

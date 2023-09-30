@@ -82,5 +82,15 @@ class ProductController extends Controller
 
     public function cart()
     {
+        $email = session()->get("email");
+        $user = User::query()->find($email);
+        $order = $user->order_open;
+        $order_details = $user->order_details;
+
+        return response()->view("cart", [
+            "title" => "Cart",
+            "order" => $order,
+            "order_details" => $order_details
+        ]);
     }
 }

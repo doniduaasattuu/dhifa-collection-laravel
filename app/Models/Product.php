@@ -14,8 +14,8 @@ class Product extends Model
     public $incrementing = true;
     public $timestamps = false;
 
-    public function orderDetail(): BelongsTo
+    public function order_detail(): BelongsTo
     {
-        return $this->belongsTo(OrderDetail::class, "order_id", "id");
+        return $this->belongsTo(OrderDetail::class, "product_id", "id");
     }
 }
