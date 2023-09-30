@@ -61,25 +61,31 @@ class ProductControllerTest extends TestCase
         self::assertCount(0, Order::query()->get());
     }
 
-    public function testProductAlreadyOnCart()
+    public function testOrderOpenRelations()
     {
-        $product_already_on_cart = OrderDetail::query()->where("product_id", "=", "1")->first();
-        self::assertNotNull($product_already_on_cart);
-        Log::info(json_encode($product_already_on_cart));
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
+        $order_open = $user->order_open;
+        self::assertNotNull($order_open);
+        self::assertEquals("doni.duaasattuu@gmail.com", $order_open->email);
+        self::assertEquals("Open", $order_open->status);
+        Log::info(json_encode($order_open, JSON_PRETTY_PRINT));
+
+        $order_details = OrderDetail::where("order_id", "=", $order_open->id)->get();
+        Log::info(json_encode($order_details, JSON_PRETTY_PRINT));
+        foreach ($order_details as $order_detail) {
+            if ($order_detail->product_id == 1) {
+                $order_detail->qty = $order_detail->qty + 1;
+                $order_detail->save();
+            }
+        }
     }
 
-    public function testProductNotAlreadyOnCart()
-    {
-        $product_not_already_on_cart = OrderDetail::query()->where("product_id", "=", "90")->first();
-        self::assertNull($product_not_already_on_cart);
-        Log::info(json_encode($product_not_already_on_cart));
-    }
-
-    public function testFindOnCart()
-    {
-        $product_already_on_cart = OrderDetail::query()->where("order_id", "=", "9a410913-4a2f-4608-9e33-efda023de89e")->where("product_id", "=", "1")->get();
-        self::assertNotNull($product_already_on_cart);
-        self::assertCount(1, $product_already_on_cart);
-        Log::info(json_encode($product_already_on_cart));
-    }
+    // public function testOrderDetailRelations()
+    // {
+    //     $user = User::query()->find("doni.duaasattuu@gmail.com");
+    //     $orders = $user->orders;
+    //     self::assertNotNull($orders);
+    //     self::assertEquals($orders->status, "Closed");
+    //     Log::info(json_encode($orders, JSON_PRETTY_PRINT));
+    // }
 }

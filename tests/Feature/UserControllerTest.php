@@ -262,29 +262,18 @@ class UserControllerTest extends TestCase
         $user->save();
     }
 
-    public function testUserRelation()
+    public function testUserOrderRelation()
     {
-        $user = User::query()->with("orders")->find("doni.duaasattuu@gmail.com");
-        self::assertNotNull($user);
-        Log::info(json_encode($user, JSON_PRETTY_PRINT));
-
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
         $orders = $user->orders;
+        self::assertCount(1, $orders);
         self::assertNotNull($orders);
-        Log::info(json_encode($orders, JSON_PRETTY_PRINT));
-    }
+        Log::info(json_encode($orders));
 
-    public function testOrderRelation()
-    {
-        $order = Order::query()->with("order_details")->find("9a410913-4a2f-4608-9e33-efda023de89e");
-        self::assertNotNull($order);
-        Log::info(json_encode($order, JSON_PRETTY_PRINT));
-    }
-
-    public function testOrderDetailRelation()
-    {
-        $order_detail = OrderDetail::query()->with("products")->where("order_id",  "=", "9a410913-4a2f-4608-9e33-efda023de89e")->get();
-        self::assertNotNull($order_detail);
-        Log::info(json_encode($order_detail, JSON_PRETTY_PRINT));
+        $user = User::query()->find("adzkiyaputria@gmail.com");
+        $orders = $user->orders;
+        self::assertCount(0, $orders);
+        self::assertTrue($orders->toArray() == null);
     }
 
     public function testHasManyThrough()
