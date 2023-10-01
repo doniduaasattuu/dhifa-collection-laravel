@@ -12,6 +12,8 @@ abstract class TestCase extends BaseTestCase
     protected function setUp(): void
     {
         parent::setUp();
+        DB::table('order_details')->delete();
+        DB::table('orders')->delete();
         DB::table('users')->where("email", "=", "test@gmail.com")->delete();
     }
 }

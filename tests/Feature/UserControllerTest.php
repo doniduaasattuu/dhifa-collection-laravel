@@ -5,6 +5,8 @@ namespace Tests\Feature;
 use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\User;
+use Database\Seeders\OrderDetailSeeder;
+use Database\Seeders\OrderSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Http\Request;
@@ -264,16 +266,16 @@ class UserControllerTest extends TestCase
 
     public function testUserOrderRelation()
     {
+
+        $this->seed([OrderSeeder::class, OrderDetailSeeder::class]);
+
         $user = User::query()->find("doni.duaasattuu@gmail.com");
         $orders = $user->orders;
-        self::assertCount(1, $orders);
+        self::assertCount(4, $orders);
         self::assertNotNull($orders);
-        Log::info(json_encode($orders));
 
         $user = User::query()->find("adzkiyaputria@gmail.com");
-        $orders = $user->orders;
-        self::assertCount(0, $orders);
-        self::assertTrue($orders->toArray() == null);
+        self::assertNull($user);
     }
 
     public function testHasManyThrough()

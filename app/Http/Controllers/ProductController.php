@@ -85,17 +85,18 @@ class ProductController extends Controller
     {
         $email = session()->get("email");
         $user = User::query()->find($email);
-        $order = $user->order_open;
-        $order_details = $user->order_details;
+        $order_open = $user->order_open;
 
-        if ($order == null || count($order_details) == 0) {
+        if ($order_open == null || 0 == count($order_open->order_details)) {
             return response()->view("empty-cart", [
                 "title" => "Cart",
             ]);
         } else {
+            $order_details = $order_open->order_details;
+
             return response()->view("cart", [
                 "title" => "Cart",
-                "order" => $order,
+                "order" => $order_open,
                 "order_details" => $order_details
             ]);
         }
