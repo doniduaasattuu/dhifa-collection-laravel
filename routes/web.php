@@ -34,7 +34,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
 
     // PRODUCT
     Route::post("add-to-cart/{id}", [App\Http\Controllers\ProductController::class, "addToCart"]);
-    Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"]);
+    Route::post("/delete-product", [App\Http\Controllers\ProductController::class, "deleteProductFromCart"]);
+    Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"])->name("cart");
 });
 
 Route::middleware(OnlyGuestMiddleware::class)->group(function () {

@@ -163,6 +163,7 @@
         }
     }
 </style>
+@include("hide-scrollbar")
 
 <body>
 

@@ -7,6 +7,7 @@ use App\Models\Order;
 use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\User;
+use Illuminate\Cache\RedisTagSet;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
 
@@ -92,5 +93,15 @@ class ProductController extends Controller
             "order" => $order,
             "order_details" => $order_details
         ]);
+    }
+
+    public function deleteProductFromCart(Request $request)
+    {
+        $product_id = $request->input("product_id");
+        $order_id =  $request->input("order_id");
+
+        OrderDetail::query()->where("order_id", "=",  $order_id)->where("product_id", "=", $product_id)->delete();
+
+        return redirect("cart");
     }
 }
