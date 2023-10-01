@@ -90,7 +90,7 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <th scope="col">Qty</th>
+                    <th scope="col">Quantity</th>
                     <th scope="col">Subtotal</th>
                     <th scope="col">Delete</th>
                 </tr>
