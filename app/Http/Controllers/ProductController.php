@@ -88,11 +88,17 @@ class ProductController extends Controller
         $order = $user->order_open;
         $order_details = $user->order_details;
 
-        return response()->view("cart", [
-            "title" => "Cart",
-            "order" => $order,
-            "order_details" => $order_details
-        ]);
+        if ($order == null || count($order_details) == 0) {
+            return response()->view("empty-cart", [
+                "title" => "Cart",
+            ]);
+        } else {
+            return response()->view("cart", [
+                "title" => "Cart",
+                "order" => $order,
+                "order_details" => $order_details
+            ]);
+        }
     }
 
     public function deleteProductFromCart(Request $request)
@@ -102,6 +108,17 @@ class ProductController extends Controller
 
         OrderDetail::query()->where("order_id", "=",  $order_id)->where("product_id", "=", $product_id)->delete();
 
+        return redirect("cart");
+    }
+
+    public function deleteBasket(Request $request)
+    {
+        $email = session()->get("email");
+        $user = User::query()->find($email);
+        $order_id =  $request->input("order_id");
+
+        OrderDetail::query()->where("order_id", "=",  $order_id)->delete();
+        // Order::query()->find($order_id)->where("email", "=", $email)->delete();
         return redirect("cart");
     }
 }

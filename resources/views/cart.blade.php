@@ -90,7 +90,6 @@
             <thead>
                 <tr>
                     <th scope="col">Name</th>
-                    <!-- <th scope="col">Price</th> -->
                     <th scope="col">Qty</th>
                     <th scope="col">Subtotal</th>
                     <th scope="col">Delete</th>
@@ -101,7 +100,6 @@
                 @foreach ($order_details as $order_detail)
                 <tr>
                     <td class="align-middle">{{ $order_detail->product->name }}</td>
-                    <!-- <td class="align-middle">IDR <span class="price">{{ $order_detail->price }}</span></td> -->
                     <td class="align-middle">
                         <button class="button_decrement btn btn-outline-primary btn-sm me-1">-</button>
                         <span class="text-center align-middle" style="width: 25px;" class="d-sm-inline-block">{{ $order_detail->qty }}</span>
@@ -125,9 +123,31 @@
             </tbody>
         </table>
 
+        <div class="modal fade" id="delete_basket_modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="exampleModalLabel">Delete Basket</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        Are you sure to delete this basket ?
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary" aria-label="Close" data-bs-dismiss="modal">Cancel</button>
+                        <form action="/delete-basket" method="post">
+                            @csrf
+                            <input type="hidden" id="order_id" name="order_id" value="{{ $order->id }}">
+                            <button type="submit" class="btn btn-outline-danger">Delete basket</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="row mt-4">
             <div class="col-sm">
-                <button id="clean_basket" class="clean_basket mb-sm-0 btn btn-outline-danger">Delete basket</button>
+                <button id="delete_basket" class="clean_basket mb-sm-0 btn btn-outline-danger">Delete basket</button>
             </div>
             <div class="col-sm">
                 <div class="ms-auto card" id="shopping_summary">
@@ -181,6 +201,15 @@
 
 
     @include("footer")
+
+    <script>
+        let delete_basket_modal = new bootstrap.Modal(document.getElementById('delete_basket_modal'), {});
+        const delete_basket = document.getElementById("delete_basket");
+
+        delete_basket.onclick = function() {
+            delete_basket_modal.show();
+        };
+    </script>
 
     <!-- <script>
         const button_decrement = document.getElementsByClassName("button_decrement");
