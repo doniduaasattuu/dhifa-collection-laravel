@@ -35,6 +35,7 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     // PRODUCT
     Route::post("add-to-cart/{id}", [App\Http\Controllers\ProductController::class, "addToCart"]);
     Route::post("/delete-product", [App\Http\Controllers\ProductController::class, "deleteProductFromCart"]);
+    Route::post("/decrement-product/{id}/{order_id}", [App\Http\Controllers\ProductController::class, "decrementProductFromCart"]);
     Route::post("/delete-basket", [App\Http\Controllers\ProductController::class, "deleteBasket"]);
     Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"])->name("cart");
 });

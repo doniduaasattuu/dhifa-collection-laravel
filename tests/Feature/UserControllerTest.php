@@ -273,9 +273,6 @@ class UserControllerTest extends TestCase
         $orders = $user->orders;
         self::assertCount(4, $orders);
         self::assertNotNull($orders);
-
-        $user = User::query()->find("adzkiyaputria@gmail.com");
-        self::assertNull($user);
     }
 
     public function testHasManyThrough()

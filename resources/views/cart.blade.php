@@ -108,8 +108,8 @@
                     <td>
                         <form action="/delete-product" method="POST">
                             @csrf
-                            <input type="hidden" id="product_id" name="product_id" value="{{ $order_detail->product->id }}">
-                            <input type="hidden" id="order_id" name="order_id" value="{{ $order_detail->order_id }}">
+                            <input type="hidden" class="product_id_cart" id="product_id" name="product_id" value="{{ $order_detail->product->id }}">
+                            <input type="hidden" class="order_id_cart" id="order_id" name="order_id" value="{{ $order_detail->order_id }}">
                             <button type="submit" class="btn btn-danger"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-trash" viewBox="0 0 16 16">
                                     <path d="M5.5 5.5A.5.5 0 0 1 6 6v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm2.5 0a.5.5 0 0 1 .5.5v6a.5.5 0 0 1-1 0V6a.5.5 0 0 1 .5-.5Zm3 .5a.5.5 0 0 0-1 0v6a.5.5 0 0 0 1 0V6Z" />
                                     <path d="M14.5 3a1 1 0 0 1-1 1H13v9a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V4h-.5a1 1 0 0 1-1-1V2a1 1 0 0 1 1-1H6a1 1 0 0 1 1-1h2a1 1 0 0 1 1 1h3.5a1 1 0 0 1 1 1v1ZM4.118 4 4 4.059V13a1 1 0 0 0 1 1h6a1 1 0 0 0 1-1V4.059L11.882 4H4.118ZM2.5 3h11V2h-11v1Z" />
@@ -168,17 +168,17 @@
                         <!-- SHIPPING ADDRESS -->
                         <p class="card-text">
                         <h6 class="fw-bold">Shipping address</h6>
-                        <span class="shipping_address text-secondary">Cikarang</span></p>
+                        <span class="shipping_address text-secondary">{{ $order->user->address }}</span></p>
 
                         <!-- SHIPPING PRICE -->
                         <h6 class="fw-bold">Shipping price</h6>
-                        IDR <span class="shipping_price">50</span>K</p>
+                        IDR <span class="shipping_price">50000</span></p>
                         <hr>
 
                         <!-- TOTAL PAYMENT -->
                         <p class="card-text">
                         <h6 class="fw-bold">Total payment</h6>
-                        IDR <span class="total_payment">500</span>K</p>
+                        IDR <span class="total_payment">0</span></p>
                         <hr>
 
                         <div class="d-sm-flex d-block justify-content-between">
@@ -203,12 +203,43 @@
     @include("footer")
 
     <script>
+        // DELETE BASKET START
         let delete_basket_modal = new bootstrap.Modal(document.getElementById('delete_basket_modal'), {});
         const delete_basket = document.getElementById("delete_basket");
-
         delete_basket.onclick = function() {
             delete_basket_modal.show();
         };
+
+        const total_amount = document.getElementsByClassName("total_amount")[0];
+        let total_payment = document.getElementsByClassName("total_payment")[0];
+        const shipping_price = document.getElementsByClassName("shipping_price")[0];
+        total_payment.textContent = Number(total_amount.textContent) + Number(shipping_price.textContent);
+
+        const button_decrement = document.getElementsByClassName("button_decrement");
+        const button_increment = document.getElementsByClassName("button_increment");
+        const amount = document.getElementsByClassName("amount");
+        const product_id = document.getElementsByClassName("product_id_cart");
+        const order_id = document.getElementsByClassName("order_id_cart");
+        for (let i = 0; i < button_decrement.length; i++) {
+            button_decrement[i].onclick = () => {
+
+                if (Number(button_decrement[i].nextElementSibling.textContent) > 1) {
+
+                    const ajax = new XMLHttpRequest();
+                    ajax.open("POST", "/decrement-product/" + product_id[i].value + "/" + order_id[i].value);
+                    ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    ajax.setRequestHeader("X-CSRF-TOKEN", "<?php echo csrf_token() ?>");
+                    ajax.send();
+
+                    ajax.onreadystatechange = () => {
+                        if (ajax.readyState == 4) {
+                            location.reload();
+                        }
+                    }
+                }
+
+            }
+        }
     </script>
 
     <!-- <script>

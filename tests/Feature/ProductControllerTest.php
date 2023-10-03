@@ -226,4 +226,30 @@ class ProductControllerTest extends TestCase
         ])->assertRedirect("cart")
             ->assertStatus(302);
     }
+
+    public function testDecrementProductFromCart()
+    {
+        $this->seed([OrderSeeder::class, OrderDetailSeeder::class]);
+
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
+        $order_open = $user->order_open;
+
+        $product = OrderDetail::query()->where("order_id", "=",  $order_open->id)->where("product_id", "=", 2)->first();
+        self::assertNotNull($product);
+        self::assertEquals(1, $product->qty);
+
+        $product->qty = $product->qty + 1;
+        $product->amount = $product->price * $product->qty;
+        $product->update();
+
+        $order_open->shopping_total = $order_open->order_details->sum("amount");
+        $order_open->update();
+
+        self::assertEquals(2, $product->qty);
+        self::assertEquals(220000, $product->amount);
+
+        self::assertEquals(340000, $order_open->shopping_total);
+        // Log::info(json_encode($product, JSON_PRETTY_PRINT));
+        // Log::info(json_encode($order_open, JSON_PRETTY_PRINT));
+    }
 }

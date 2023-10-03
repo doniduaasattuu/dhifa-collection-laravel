@@ -122,4 +122,20 @@ class ProductController extends Controller
         // Order::query()->find($order_id)->where("email", "=", $email)->delete();
         return redirect("cart");
     }
+
+    public function decrementProductFromCart(Request $request, string $id, string $order_id)
+    {
+
+        $product = OrderDetail::query()->where("order_id", "=",  $order_id)->where("product_id", "=", $id)->first();
+
+        $product->qty = $product->qty - 1;
+        $product->amount = $product->price * $product->qty;
+        $product->update();
+
+        $order_open = Order::query()->find($order_id);
+        $order_open->shopping_total = $order_open->order_details->sum("amount");
+        $order_open->update();
+
+        // return redirect("cart");
+    }
 }
