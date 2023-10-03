@@ -3,8 +3,12 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Order;
+use App\Models\OrderDetail;
 use App\Models\Product;
 use App\Models\User;
+use Database\Seeders\OrderDetailSeeder;
+use Database\Seeders\OrderSeeder;
 use Illuminate\Http\Request;
 
 class UserController extends Controller

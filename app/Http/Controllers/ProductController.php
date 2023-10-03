@@ -84,20 +84,26 @@ class ProductController extends Controller
     public function cart()
     {
         $email = session()->get("email");
-        $user = User::query()->find($email);
+        $user = User::query()->with("orders", "order_open", "order_details")->find($email);
         $order_open = $user->order_open;
+        $order_checkout = $user->order_checkout;
 
-        if ($order_open == null || 0 == count($order_open->order_details)) {
-            return response()->view("empty-cart", [
-                "title" => "Cart",
+        if (!empty($order_checkout) && !empty($order_checkout->order_details)) {
+            return response()->view("checkout", [
+                "title" => "Checkout",
+                "order" => $order_checkout
             ]);
-        } else {
+        } else if (!empty($order_open) && !empty($order_open->order_details)) {
             $order_details = $order_open->order_details;
 
             return response()->view("cart", [
                 "title" => "Cart",
                 "order" => $order_open,
                 "order_details" => $order_details
+            ]);
+        } else {
+            return response()->view("empty-cart", [
+                "title" => "Cart",
             ]);
         }
     }
@@ -149,5 +155,24 @@ class ProductController extends Controller
         $order_open = Order::query()->find($order_id);
         $order_open->shopping_total = $order_open->order_details->sum("amount");
         $order_open->update();
+    }
+
+    public function checkout(Request $request, string $order_id, string $total_payment)
+    {
+        $order = Order::query()->find($order_id);
+        $order->shopping_total = $total_payment;
+        $order->status = "Checkout";
+        $order->update();
+
+        return redirect("cart");
+    }
+
+    public function cancelOrder(Request $request, string $order_id)
+    {
+        $order = Order::query()->find($order_id);
+        $order->status = "Open";
+        $order->update();
+
+        return redirect("cart");
     }
 }

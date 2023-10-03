@@ -164,6 +164,8 @@ class ProductControllerTest extends TestCase
     {
         $this->seed([OrderSeeder::class, OrderDetailSeeder::class]);
 
+        Order::query()->where("status", "=", "Checkout")->first()->delete();
+
         $this->withSession([
             "user" => "Doni Darmawan",
             "email" => "doni.duaasattuu@gmail.com"
@@ -182,6 +184,8 @@ class ProductControllerTest extends TestCase
     public function testAddToCart()
     {
         $this->seed([OrderSeeder::class]);
+
+        Order::query()->where("status", "=", "Checkout")->first()->delete();
 
         $this->withSession([
             "user" => "Doni Darmawan",
@@ -249,7 +253,27 @@ class ProductControllerTest extends TestCase
         self::assertEquals(220000, $product->amount);
 
         self::assertEquals(340000, $order_open->shopping_total);
-        // Log::info(json_encode($product, JSON_PRETTY_PRINT));
-        // Log::info(json_encode($order_open, JSON_PRETTY_PRINT));
+    }
+
+    public function testCheckout()
+    {
+        $this->seed([OrderSeeder::class, OrderDetailSeeder::class]);
+
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
+        $order_open = $user->order_open;
+
+        $order = Order::query()->find($order_open->id);
+        self::assertEquals("Open", $order->status);
+    }
+
+    public function testOrderCheckout()
+    {
+        $this->seed([OrderSeeder::class, OrderDetailSeeder::class]);
+
+        $user = User::query()->find("doni.duaasattuu@gmail.com");
+        $checkout = $user->order_checkout;
+
+        self::assertNotNull($checkout);
+        Log::info(json_encode($checkout, JSON_PRETTY_PRINT));
     }
 }

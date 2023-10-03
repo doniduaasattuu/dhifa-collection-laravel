@@ -38,6 +38,8 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::post("/decrement-product/{id}/{order_id}", [App\Http\Controllers\ProductController::class, "decrementProductFromCart"]);
     Route::post("/increment-product/{id}/{order_id}", [App\Http\Controllers\ProductController::class, "incrementProductFromCart"]);
     Route::post("/delete-basket", [App\Http\Controllers\ProductController::class, "deleteBasket"]);
+    Route::post("/checkout/{order_id}/{total_payment}", [App\Http\Controllers\ProductController::class, "checkout"]);
+    Route::post("/cancel-order/{order_id}", [App\Http\Controllers\ProductController::class, "cancelOrder"]);
     Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"])->name("cart");
 });
 

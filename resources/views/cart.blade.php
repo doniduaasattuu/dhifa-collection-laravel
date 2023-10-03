@@ -187,7 +187,6 @@
                                 <option value="ATM Transfer">ATM Transfer</option>
                                 <option value="BRIVA">BRIVA</option>
                             </select>
-                            <!-- <a href="#" class="checkout float-end mt-sm-0 mt-3 btn btn-primary">Checkout</a> -->
                             <button class="checkout float-end mt-sm-0 mt-3 btn btn-primary">Checkout</button>
                         </div>
                     </div>
@@ -195,12 +194,25 @@
             </div>
         </div>
     </div>
-
-
     </div>
 
 
-    @include("footer")
+    <div class="border-top fixed-bottom">
+        <div class="container">
+            <footer class="d-flex flex-wrap justify-content-evenly justify-content-sm-between align-items-center py-3">
+
+                <p class="nav col-md-4 mb-0 text-body-secondary">&copy;2023 Dhifa Collection</p>
+
+                <ul class="nav">
+                    <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
+                    <li class="nav-item"><a href="cart" class="nav-link px-2 text-body-secondary">Cart</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contact</a></li>
+                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
+                </ul>
+
+            </footer>
+        </div>
+    </div>
 
     <script>
         // DELETE BASKET START
@@ -257,6 +269,43 @@
                     }
                 }
 
+            }
+        }
+
+        // CHECKOUT
+        const checkout = document.getElementsByClassName("checkout")[0];
+        const payment_method = document.getElementsByClassName("payment_method")[0];
+        checkout.onclick = () => {
+            if (payment_method.value == "Payment method") {
+                let myModal = new bootstrap.Modal(document.getElementById('select_payment_method'), {});
+                myModal.show();
+
+            } else {
+
+                if (payment_method.value == "ATM Transfer") {
+
+                    // window.location = "/{{ $order->id }}/" + total_payment.textContent;
+                    ajax = new XMLHttpRequest();
+                    ajax.open("POST", "/checkout/{{ $order->id }}/" + total_payment.textContent);
+                    ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                    ajax.setRequestHeader("X-CSRF-TOKEN", "<?php echo csrf_token() ?>");
+
+                    ajax.onreadystatechange = () => {
+                        if (ajax.readyState == 4) {
+                            location.reload();
+                        }
+                    }
+
+                    ajax.send();
+
+                } else if (payment_method.value == "BRIVA") {
+
+                    let myModal = new bootstrap.Modal(document.getElementById('briva'), {});
+                    myModal.show();
+
+                } else {
+                    console.info("Tidak diketahui")
+                }
             }
         }
     </script>

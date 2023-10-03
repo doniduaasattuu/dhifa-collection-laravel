@@ -27,6 +27,12 @@ class User extends Model
             ->where("status", "=", "Open");
     }
 
+    public function order_checkout(): HasOne
+    {
+        return $this->hasOne(Order::class, "email", "email")
+            ->where("status", "=", "Checkout");
+    }
+
     public function order_details(): HasManyThrough
     {
         return $this->hasManyThrough(
