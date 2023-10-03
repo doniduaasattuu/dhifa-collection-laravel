@@ -220,6 +220,7 @@
         const amount = document.getElementsByClassName("amount");
         const product_id = document.getElementsByClassName("product_id_cart");
         const order_id = document.getElementsByClassName("order_id_cart");
+        // DECREMENT
         for (let i = 0; i < button_decrement.length; i++) {
             button_decrement[i].onclick = () => {
 
@@ -235,6 +236,24 @@
                         if (ajax.readyState == 4) {
                             location.reload();
                         }
+                    }
+                }
+
+            }
+        }
+        // INCREMENT
+        for (let i = 0; i < button_increment.length; i++) {
+            button_increment[i].onclick = () => {
+
+                const ajax = new XMLHttpRequest();
+                ajax.open("POST", "/increment-product/" + product_id[i].value + "/" + order_id[i].value);
+                ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
+                ajax.setRequestHeader("X-CSRF-TOKEN", "<?php echo csrf_token() ?>");
+                ajax.send();
+
+                ajax.onreadystatechange = () => {
+                    if (ajax.readyState == 4) {
+                        location.reload();
                     }
                 }
 
