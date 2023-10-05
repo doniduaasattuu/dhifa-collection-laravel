@@ -84,22 +84,29 @@ class ProductController extends Controller
     public function cart()
     {
         $email = session()->get("email");
-        $user = User::query()->with("orders", "order_open", "order_details")->find($email);
+        $user = User::query()->with("orders", "order_open", "order_checkout", "order_verified", "order_details")->find($email);
         $order_open = $user->order_open;
         $order_checkout = $user->order_checkout;
+        $order_verified = $user->order_verified;
 
-        if (!empty($order_checkout) && !empty($order_checkout->order_details)) {
-            return response()->view("checkout", [
-                "title" => "Checkout",
-                "order" => $order_checkout
-            ]);
-        } else if (!empty($order_open) && !empty($order_open->order_details)) {
+        if (!empty($order_open) && !empty($order_open->order_details) && count($order_open->order_details) >= 1) {
             $order_details = $order_open->order_details;
 
             return response()->view("cart", [
                 "title" => "Cart",
                 "order" => $order_open,
                 "order_details" => $order_details
+            ]);
+        } else if (!empty($order_checkout) && !empty($order_checkout->order_details)) {
+            return response()->view("checkout", [
+                "title" => "Checkout",
+                "order" => $order_checkout
+            ]);
+        } else if (!empty($order_verified) && !empty($order_verified->order_details)) {
+            return response()->view("checkout", [
+                "title" => "Checkout",
+                "order" => $order_verified,
+                "verified" => true
             ]);
         } else {
             return response()->view("empty-cart", [
@@ -171,6 +178,15 @@ class ProductController extends Controller
     {
         $order = Order::query()->find($order_id);
         $order->status = "Open";
+        $order->update();
+
+        return redirect("cart");
+    }
+
+    public function uploadResi(Request $request, string $order_id)
+    {
+        $order = Order::query()->find($order_id);
+        $order->status = "Verified";
         $order->update();
 
         return redirect("cart");

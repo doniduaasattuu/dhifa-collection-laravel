@@ -59,15 +59,10 @@
             <div class="p-3">
                 <div>
                     <div class="d-flex justify-content-between">
-                        <p id="invoice">{{ $order->id }}</p>
-                        <?php
-                        // if (isset($model["verified"])) {
-                        //     $status = <<<STATUS
-                        //         <p class="bg-success px-2 text-light rounded">Verified</p>
-                        //         STATUS;
-                        //     echo $status;
-                        // }
-                        ?>
+                        <p id="invoice">INV/{{ explode("-", $order->id)[0] }}/</p>
+                        @isset($verified)
+                        <p class="bg-success px-2 text-light rounded">Verified</p>
+                        @endisset
                     </div>
                     <p>Transfer to the account number below</p>
                     <span class="fw-bold"><img style="width: 25px; margin-right: 0.25rem" src="img/BRI.png" alt="BRI">4440004051502</span>
@@ -80,7 +75,8 @@
                     </p>
 
                 </div>
-                <form method="POST" action="upload_resi" enctype="multipart/form-data">
+                <form method="POST" action="upload-resi/{{ $order->id }}" enctype="multipart/form-data">
+                    @csrf
                     <div class="form-group">
                         <label class="mb-2" for="payment_receipt">Upload payment receipt</label>
                         <input type="file" class="d-inline-block form-control-file" name="payment_receipt" id="payment_receipt" accept="image/*">
@@ -89,7 +85,7 @@
                 </form>
                 <form method="POST" action="cancel-order/{{ $order->id }}">
                     @csrf
-                    <button id="cancel_order" class=" w-100 btn btn-outline-danger">Cancel order</button>
+                    <button @isset($verified) disabled @endisset id="cancel_order" class=" w-100 btn btn-outline-danger">Cancel order</button>
                 </form>
             </div>
         </div>
@@ -138,7 +134,12 @@
     </div>
 
     <script>
-        const cancel_order_button = document.getElementById("cancel_order");
+        let upload_button = document.getElementById("upload_button");
+        let input_file = document.getElementById("payment_receipt");
+
+        input_file.onchange = () => {
+            upload_button.removeAttribute("disabled");
+        }
     </script>
 
     <!-- <script>

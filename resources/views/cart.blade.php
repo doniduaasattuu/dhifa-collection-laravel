@@ -29,6 +29,10 @@
             width: 100%;
         }
     }
+
+    .navbar {
+        margin-bottom: 3rem;
+    }
 </style>
 @include("hide-scrollbar")
 
@@ -73,7 +77,7 @@
         </div>
     </div>
 
-    <div class="container py-5">
+    <div id="cart" class="container min-vh-100 mb-5">
         <div class="m-1 d-flex justify-content-between align-items-baseline">
             <div>
                 <h2><?php
@@ -118,7 +122,6 @@
                     </td>
                 </tr>
                 @endforeach
-
 
             </tbody>
         </table>
@@ -194,25 +197,8 @@
             </div>
         </div>
     </div>
-    </div>
 
-
-    <div class="border-top fixed-bottom">
-        <div class="container">
-            <footer class="d-flex flex-wrap justify-content-evenly justify-content-sm-between align-items-center py-3">
-
-                <p class="nav col-md-4 mb-0 text-body-secondary">&copy;2023 Dhifa Collection</p>
-
-                <ul class="nav">
-                    <li class="nav-item"><a href="/" class="nav-link px-2 text-body-secondary">Home</a></li>
-                    <li class="nav-item"><a href="cart" class="nav-link px-2 text-body-secondary">Cart</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">Contact</a></li>
-                    <li class="nav-item"><a href="#" class="nav-link px-2 text-body-secondary">About</a></li>
-                </ul>
-
-            </footer>
-        </div>
-    </div>
+    @include("footer")
 
     <script>
         // DELETE BASKET START

@@ -33,6 +33,12 @@ class User extends Model
             ->where("status", "=", "Checkout");
     }
 
+    public function order_verified(): HasOne
+    {
+        return $this->hasOne(Order::class, "email", "email")
+            ->where("status", "=", "Verified");
+    }
+
     public function order_details(): HasManyThrough
     {
         return $this->hasManyThrough(
