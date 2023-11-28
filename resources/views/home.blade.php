@@ -289,25 +289,25 @@
     </div>
     <!-- CAROUSEL END -->
 
-    @include("footer")
-
 
     <script>
-        const button = document.getElementsByClassName("myButton");
+        const buttons = document.getElementsByClassName("myButton");
         let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
 
-        for (let i = 0; i < button.length; i++) {
+        for (let i = 0; i < buttons.length; i++) {
 
-            button[i].onclick = () => {
+            buttons[i].onclick = () => {
 
                 const ajax = new XMLHttpRequest();
-                ajax.open("POST", "add-to-cart/" + button[i].getAttribute("product_id"));
+                ajax.open("POST", "add-to-cart/" + buttons[i].getAttribute("product_id"));
                 ajax.setRequestHeader("Content-Type", "application/x-www-form-urlencoded");
                 ajax.setRequestHeader("X-CSRF-TOKEN", "<?php echo csrf_token() ?>");
 
                 ajax.onreadystatechange = () => {
                     if (ajax.readyState === 4) {
                         myModal1.show();
+                        // let response = ajax.responseText
+                        // console.log(JSON.parse(response));
                     }
                 }
 

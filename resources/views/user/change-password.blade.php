@@ -18,7 +18,7 @@
 
     @include("navbar")
 
-    <div style="transform: translateY(25%);" class="container d-flex absolute">
+    <div class="container d-flex absolute mt-3">
         <div class="my-auto align-items-center mx-auto" style="min-width: 300px;">
 
             @isset($error)
@@ -53,6 +53,7 @@
 
     </div>
 
+    @include("footer")
 </body>
 
 </html>

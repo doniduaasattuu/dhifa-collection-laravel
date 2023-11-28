@@ -1,4 +1,4 @@
-<div class="border-top">
+<div class="border-top fixed-bottom">
     <div class="container">
         <footer class="d-flex flex-wrap justify-content-evenly justify-content-sm-between align-items-center py-3">
 
