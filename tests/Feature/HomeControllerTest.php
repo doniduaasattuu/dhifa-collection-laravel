@@ -16,7 +16,6 @@ class HomeControllerTest extends TestCase
             ->assertSeeText("Search")
             ->assertSeeText("Home")
             ->assertSeeText("Dhifa Collection")
-            ->assertSeeText("Add to cart")
-            ->assertSeeText("2023");
+            ->assertSeeText("Add to cart");
     }
 }

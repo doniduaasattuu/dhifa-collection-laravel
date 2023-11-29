@@ -210,6 +210,23 @@
         </div>
     </div>
 
+    <div class="modal fade" id="exampleModal2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="bg-light modal-header">
+                    <h1 class=" modal-title fs-5" id="exampleModalLabel">Failed! ⚠️</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Finish your current payment first!
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="myCarousel" class="carousel slide mb-0" data-bs-ride="carousel" data-bs-theme="light">
         <div class="carousel-indicators">
             <button type="button" data-bs-target="#myCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
@@ -293,6 +310,7 @@
     <script>
         const buttons = document.getElementsByClassName("myButton");
         let myModal1 = new bootstrap.Modal(document.getElementById('exampleModal1'), {});
+        let myModal2 = new bootstrap.Modal(document.getElementById('exampleModal2'), {});
 
         for (let i = 0; i < buttons.length; i++) {
 
@@ -305,9 +323,15 @@
 
                 ajax.onreadystatechange = () => {
                     if (ajax.readyState === 4) {
-                        myModal1.show();
-                        // let response = ajax.responseText
-                        // console.log(JSON.parse(response));
+                        let response = ajax.responseText
+                        let message = JSON.parse(response).message;
+
+                        console.info(message);
+                        if (message == "Success") {
+                            myModal1.show();
+                        } else {
+                            myModal2.show();
+                        }
                     }
                 }
 

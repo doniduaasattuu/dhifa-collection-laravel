@@ -41,6 +41,10 @@ class ProductController extends Controller
 
             $order->shopping_total = $order_detail->amount;
             $order->save();
+
+            return response()->json([
+                "message" => "Success"
+            ]);
         } else {
 
             // order sudah ada, lalu dilakukan pengecekan order
@@ -61,7 +65,9 @@ class ProductController extends Controller
                         $order->shopping_total = $order_details->sum("amount");
                         $order->save();
 
-                        return;
+                        return response()->json([
+                            "message" => "Success"
+                        ]);
                     }
                 }
 
@@ -77,6 +83,31 @@ class ProductController extends Controller
                 $order = Order::query()->find($order_open->id);
                 $order->shopping_total = $order_details->sum("amount");
                 $order->save();
+
+                return response()->json([
+                    "message" => "Success"
+                ]);
+            } else {
+
+                return response()->json([
+                    "message" => "Failed"
+                ]);
+                // $order = Order::create([
+                //     "email" => $email
+                // ]);
+
+                // $product = Product::query()->find($id);
+
+                // $order_detail = new OrderDetail();
+                // $order_detail->order_id = $order->id;
+                // $order_detail->product_id = $id;
+                // $order_detail->qty = 1;
+                // $order_detail->price = $product->price;
+                // $order_detail->amount = $product->price;
+                // $order_detail->save();
+
+                // $order->shopping_total = $order_detail->amount;
+                // $order->save();
             }
         }
     }
