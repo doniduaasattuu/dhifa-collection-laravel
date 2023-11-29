@@ -18,4 +18,12 @@ class HomeController extends Controller
             "products" => $products
         ]);
     }
+
+    public function contact(Request $request)
+    {
+        return response()->view("contact", [
+            "title" => "Contact",
+            "user" => $request->session()->get("user"),
+        ]);
+    }
 }

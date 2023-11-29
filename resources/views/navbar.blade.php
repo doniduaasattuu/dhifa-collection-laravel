@@ -16,11 +16,11 @@
                 <li class="nav-item me-xl-5 me-lg-3">
                     <a class="text-dark nav-link" href="/cart">Cart</a>
                 </li>
-                <li class="nav-item me-xl-5 me-lg-3">
+                <!-- <li class="nav-item me-xl-5 me-lg-3">
                     <a class="text-dark nav-link" href="#">New arrival</a>
-                </li>
+                </li> -->
                 <li class="nav-item me-xl-5 me-lg-3">
-                    <a class="text-dark nav-link" href="#">Contact</a>
+                    <a class="text-dark nav-link" href="/contact">Contact</a>
                 </li>
                 <li class="nav-item dropdown">
                     <a class="text-dark nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">

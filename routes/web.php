@@ -2,6 +2,7 @@
 
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -42,6 +43,9 @@ Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     Route::post("/cancel-order/{order_id}", [App\Http\Controllers\ProductController::class, "cancelOrder"]);
     Route::post("/upload-resi/{order_id}", [App\Http\Controllers\ProductController::class, "uploadResi"]);
     Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"])->name("cart");
+
+    // CONTACT
+    Route::get("/contact", [\App\Http\Controllers\HomeController::class, "contact"]);
 });
 
 Route::middleware(OnlyGuestMiddleware::class)->group(function () {
