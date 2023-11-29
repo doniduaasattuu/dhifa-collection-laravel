@@ -1,5 +1,8 @@
 <?php
 
+use App\Http\Controllers\HomeController;
+use App\Http\Controllers\ProductController;
+use App\Http\Controllers\UserController;
 use App\Http\Middleware\OnlyGuestMiddleware;
 use App\Http\Middleware\OnlyMemberMiddleware;
 use Illuminate\Support\Facades\App;
@@ -20,41 +23,42 @@ use Illuminate\Support\Facades\Route;
 
 Route::middleware(OnlyMemberMiddleware::class)->group(function () {
     // HOME
-    Route::get('/', [\App\Http\Controllers\HomeController::class, "home"]);
+    Route::get('/', [HomeController::class, "home"]);
 
     // CHANGE PASSWORD
-    Route::get('/change-password', [\App\Http\Controllers\UserController::class, "changePassword"]);
-    Route::post('/change-password', [\App\Http\Controllers\UserController::class, "doChangePassword"]);
+    Route::get('/change-password', [UserController::class, "changePassword"]);
+    Route::post('/change-password', [UserController::class, "doChangePassword"]);
 
     // CHANGE NAME
-    Route::get('/change-name', [\App\Http\Controllers\UserController::class, "changeName"]);
-    Route::post('/change-name', [\App\Http\Controllers\UserController::class, "doChangeName"]);
+    Route::get('/change-name', [UserController::class, "changeName"]);
+    Route::post('/change-name', [UserController::class, "doChangeName"]);
 
     // LOGOUT
-    Route::get("/logout", [App\Http\Controllers\UserController::class, "logout"]);
+    Route::get("/logout", [UserController::class, "logout"]);
 
     // PRODUCT
-    Route::post("add-to-cart/{id}", [App\Http\Controllers\ProductController::class, "addToCart"]);
-    Route::post("/delete-product", [App\Http\Controllers\ProductController::class, "deleteProductFromCart"]);
-    Route::post("/decrement-product/{id}/{order_id}", [App\Http\Controllers\ProductController::class, "decrementProductFromCart"]);
-    Route::post("/increment-product/{id}/{order_id}", [App\Http\Controllers\ProductController::class, "incrementProductFromCart"]);
-    Route::post("/delete-basket", [App\Http\Controllers\ProductController::class, "deleteBasket"]);
-    Route::post("/checkout/{order_id}/{total_payment}", [App\Http\Controllers\ProductController::class, "checkout"]);
-    Route::post("/cancel-order/{order_id}", [App\Http\Controllers\ProductController::class, "cancelOrder"]);
-    Route::post("/upload-resi/{order_id}", [App\Http\Controllers\ProductController::class, "uploadResi"]);
-    Route::get("/cart", [App\Http\Controllers\ProductController::class, "cart"])->name("cart");
+    Route::post("add-to-cart/{id}", [ProductController::class, "addToCart"]);
+    Route::post("/delete-product", [ProductController::class, "deleteProductFromCart"]);
+    Route::post("/decrement-product/{id}/{order_id}", [ProductController::class, "decrementProductFromCart"]);
+    Route::post("/increment-product/{id}/{order_id}", [ProductController::class, "incrementProductFromCart"]);
+    Route::post("/delete-basket", [ProductController::class, "deleteBasket"]);
+    Route::post("/checkout/{order_id}/{total_payment}", [ProductController::class, "checkout"]);
+    Route::post("/cancel-order/{order_id}", [ProductController::class, "cancelOrder"]);
+    Route::post("/upload-resi/{order_id}", [ProductController::class, "uploadResi"]);
+    Route::get("/cart", [ProductController::class, "cart"])->name("cart");
 
     // CONTACT
-    Route::get("/contact", [\App\Http\Controllers\HomeController::class, "contact"]);
+    Route::get("/contact", [HomeController::class, "contact"]);
+    Route::post("/contact", [HomeController::class, "sendMessage"]);
 });
 
 Route::middleware(OnlyGuestMiddleware::class)->group(function () {
 
     // LOGIN
-    Route::get("/login", [App\Http\Controllers\UserController::class, "login"]);
-    Route::post("/login", [App\Http\Controllers\UserController::class, "doLogin"]);
+    Route::get("/login", [UserController::class, "login"]);
+    Route::post("/login", [UserController::class, "doLogin"]);
 
     // REGISTRATION
-    Route::get("/register", [App\Http\Controllers\UserController::class, "registration"]);
-    Route::post("/register", [App\Http\Controllers\UserController::class, "register"]);
+    Route::get("/register", [UserController::class, "registration"]);
+    Route::post("/register", [UserController::class, "register"]);
 });
